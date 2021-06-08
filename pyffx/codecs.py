@@ -17,13 +17,11 @@ class Codec(object):
 
     def encrypt(self, v):
         #Encrypts the variable v
-        if not len(v): raise ValueError('Cannot encrypt empty set')
-        return self.unpack(self.ffx.encrypt(self.pack(v)), type(v))
+        return self.unpack(self.ffx.encrypt(self.pack(v)))
 
     def decrypt(self, v):
         #Decrypts the variable v
-        if not len(v): raise ValueError('Cannot decrypt empty set')
-        return self.unpack(self.ffx.decrypt(self.pack(v)), type(v))
+        return self.unpack(self.ffx.decrypt(self.pack(v)))
 
     @abc.abstractmethod
     def pack(self, v):
@@ -31,9 +29,9 @@ class Codec(object):
         #If the alphabet is "abc" then "aac" transforms to [0,0,2]
         raise NotImplementedError()
 
-    def unpack(self, v, t):
-        #Transforms a list of integers (v) into an object of type t
-        return t(self.alphabet[i] for i in v)
+    def unpack(self, v):
+        #Transforms a list of integers (v) into an list of elements in the alphabet
+        return [self.alphabet[i] for i in v]
 
 
 class String(Codec):
@@ -43,19 +41,16 @@ class String(Codec):
         except KeyError as e:
             raise ValueError('non-alphabet character: %s' % e)
             
-    def unpack(self, v, t):
-        return ''.join(super(String, self).unpack(v, list))
+    def unpack(self, v):
+        return ''.join(super(String, self).unpack(v))
 
 class Integer(String):
-    def __init__(self, ffx, length=None, **kwargs):
+    def __init__(self, ffx, length, **kwargs):
         self.length = length
         super(Integer, self).__init__(ffx, string.digits, **kwargs)
 
     def pack(self, v):
-        if self.length:
-            return super(Integer, self).pack(str(v).zfill(self.length))
-        else:
-            return super(Integer, self).pack(str(v))
+        return super(Integer, self).pack(str(v).zfill(self.length))
 
-    def unpack(self, v, t):
-        return int(super(Integer, self).unpack(v, t))
+    def unpack(self, v):
+        return int(super(Integer, self).unpack(v))
