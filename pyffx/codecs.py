@@ -4,7 +4,6 @@ import six
 
 from pyffx.ffx import FFX
 
-
 @six.add_metaclass(abc.ABCMeta)
 class Codec(object):
     #Abstract class 
