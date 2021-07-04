@@ -2,13 +2,12 @@ import hashlib
 import hmac
 import math
 import struct
-from six import add_metaclass
-import abc
+from abc import ABC, abstractmethod
 
 DEFAULT_ROUNDS = 10
 
-@add_metaclass(abc.ABCMeta)
-class Feistel_cipher(object):
+
+class Feistel_cipher(ABC):
     #Abstract class implementing unbalanced Feistel cipher according to 
     #http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec.pdf (using Figure 1, method 2)
     #Same Feistel in https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38Gr1-draft.pdf
@@ -30,7 +29,7 @@ class Feistel_cipher(object):
         s = int(len(v) / 2)
         return v[:s], v[s:]
     
-    @abc.abstractmethod
+    @abstractmethod
     def round(self, i, s, msg_length, tweak):
         #Subclasses must implement the round function and handle keys
         #i is the round number, s is the round input string, msg_length is the

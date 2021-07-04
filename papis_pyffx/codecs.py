@@ -1,11 +1,9 @@
-import abc
+from abc import ABC, abstractmethod
 import string
-from six import add_metaclass
 
 from .ffx import FFX
 
-@add_metaclass(abc.ABCMeta)
-class Codec(object):
+class Codec(ABC):
     #Abstract class 
     def __init__(self, ffx, alphabet, **kwargs):
         self.ffx = ( ffx 
@@ -22,7 +20,7 @@ class Codec(object):
         #Decrypts the variable v
         return self.unpack(self.ffx.decrypt(self.pack(v)))
 
-    @abc.abstractmethod
+    @abstractmethod
     def pack(self, v):
         #Transforms the object v into a list of integers based on the alphabet
         #If the alphabet is "abc" then "aac" transforms to [0,0,2]
