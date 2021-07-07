@@ -1,6 +1,6 @@
 import unittest
 
-from pyffx import String, Integer, FixedAlphabet
+from papis_pyffx import String, Integer, FixedAlphabet
 
 
 class StringTests(unittest.TestCase):
