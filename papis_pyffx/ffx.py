@@ -26,6 +26,7 @@ class Feistel_cipher(ABC):
 
     def split(self, v):
         #Splits the list into two lists split at floor(len(v)/2)
+        #FF1 uses floor, FF3 uses celing
         s = int(len(v) / 2)
         return v[:s], v[s:]
     
@@ -58,7 +59,7 @@ class FFX(Feistel_cipher):
         self.key = key
         self.digestmod = digestmod
         self.digest_size = self.digestmod().digest_size
-        super(FFX, self).__init__(radix, rounds)
+        super().__init__(radix, rounds)
         
     def round(self, i, s, msg_length, tweak = None):
         #Implements the round function

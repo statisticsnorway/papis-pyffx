@@ -1,7 +1,5 @@
 import unittest
-
 from papis_pyffx import String, Integer, FixedAlphabet
-
 
 class StringTests(unittest.TestCase):
     def test_encrypt(self):
@@ -9,7 +7,6 @@ class StringTests(unittest.TestCase):
         self.assertRaises(ValueError, s.encrypt, "abx")
         self.assertEqual(s.encrypt("cba"), "abb")
         self.assertEqual(s.decrypt(s.encrypt("ccc")), "ccc")
-
 
 class IntegerTests(unittest.TestCase):
     def test_encrypt(self):

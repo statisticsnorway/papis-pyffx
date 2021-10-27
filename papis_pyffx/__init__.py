@@ -1,4 +1,3 @@
-from .codecs import String, Integer  # noqa
 from .fixedalphabet import FixedAlphabet 
 #from pyffx.ffx import FFX  # noqa
 

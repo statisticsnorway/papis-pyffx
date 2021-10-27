@@ -9,7 +9,7 @@ class FixedAlphabet(Codec):
     def __init__(self, ffx, 
                  alphabet=string.ascii_lowercase + string.ascii_uppercase + string.digits, 
                  **kwargs):
-        super(FixedAlphabet, self).__init__(ffx, alphabet, **kwargs)
+        super().__init__(ffx, alphabet, **kwargs)
         
     def encrypt(self, v):
         #Encrypts the variable v
