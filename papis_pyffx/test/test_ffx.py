@@ -1,5 +1,6 @@
 import unittest
-from papis_pyffx import String, Integer, FixedAlphabet
+from ..fixedalphabet import FixedAlphabet
+from ..codecs import String, Integer
 
 class StringTests(unittest.TestCase):
     def test_encrypt(self):
