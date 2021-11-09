@@ -27,7 +27,7 @@ class TestLoadKey(unittest.TestCase):
         for key, cvc in self.keyCvc:
             tmpName = self.helperWriteFile([key, '\n', cvc, '\n'])
             hexKey = load_key_from_file(tmpName)
-            print(hexKey.hex())
+            #sprint(hexKey.hex())
             self.assertEqual(hexKey.hex(), key)
             
     def test_WrongKey(self):

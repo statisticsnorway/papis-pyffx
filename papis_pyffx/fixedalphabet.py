@@ -6,10 +6,10 @@ class FixedAlphabet(Codec):
     #alphabet are ignored. E.g. if alphabet = 'abcde', and cleartext = 'table'
     #then only 'abe' is encrypted the other elements are left in place.
     #If no alphabet is given the the alphabet consists of 'a-z,A-z,0-9'
-    def __init__(self, ffx, 
+    def __init__(self, ffx, key,
                  alphabet=string.ascii_lowercase + string.ascii_uppercase + string.digits, 
                  **kwargs):
-        super().__init__(ffx, alphabet, **kwargs)
+        super().__init__(ffx, key, alphabet, **kwargs)
         
     def encrypt(self, v):
         #Encrypts the variable v
@@ -37,7 +37,7 @@ class FixedAlphabet(Codec):
         #merges v and split by inserting elements from v into split whenever
         #the element of split is an integer
         #Note: Modifies the list split
-        unpacked = super(FixedAlphabet, self).unpack(v)
+        unpacked = super().unpack(v)
         i = 0
         for j in range(len(split)):
             if isinstance(split[j], int):

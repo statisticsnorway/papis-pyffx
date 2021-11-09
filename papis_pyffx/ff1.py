@@ -10,10 +10,9 @@ class FF1(Feistel_cipher):
     iv = bytes.fromhex('00000000000000000000000000000000')
     
     def __init__(self, key, radix):
-        rounds = 10
-        super().__init__(radix, rounds)
+        super().__init__(key, radix)
         self.key = key
-        self.cipherECB = AES.new(self.key, AES.MODE_ECB)
+        self.cipherECB = AES.new(key, AES.MODE_ECB)
         self.logRadix = math.log(radix, 2)
       
     @staticmethod
@@ -69,29 +68,6 @@ class FF1(Feistel_cipher):
         return r[0:d]
     
     def encrypt(self, v, tweak = []):
-        A, B = self.split(v)
-        b = math.ceil((len(v)+1)//2*self.logRadix/8)
-        #print (A, B)
-        P = self.setP(len(v),len(tweak))
-        for i in range(10):
-            #print(f'Round {i}')
-            Q = self.setQ(tweak, i, B, b)
-            R = self.AES_CBC(P + Q)
-            #print(P, Q)
-            s = self.setS(R, len(v))
-            #print(bytes(s).hex())
-            y = int.from_bytes(bytes(s), byteorder='big')
-            m = (len(v)+i%2)//2
-            c = (self._numRaxixX(A) + y)%(self.radix ** m)
-            C = self.splitN(c, m)
-            #print (s.hex(), y, c, C)
-            A, B = B, C
-            #print('A B', A, B)
-            #c = self.add(a, self.round(i, b, len(v), tweak))
-            #a, b = b, c
-        return A + B
-    
-    def encrypt2(self, v, tweak = []):
         A, B = self.split(v)
         b = math.ceil((len(v)+1)//2*self.logRadix/8)
         #print (A, B)

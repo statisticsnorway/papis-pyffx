@@ -10,10 +10,9 @@ class FF3(Feistel_cipher):
     tweak = bytes.fromhex('0000000000000000')
 
     def __init__(self, key, radix):
-        rounds = 10
-        super().__init__(radix, rounds)
-        self.key = bytes(reversed(list(key)))
-        self.cipherECB = AES.new(self.key, AES.MODE_ECB)
+        super().__init__(key, radix)
+        key = bytes(reversed(list(key)))
+        self.cipherECB = AES.new(key, AES.MODE_ECB)
       
     @staticmethod
     def byte_xor(v1, v2):

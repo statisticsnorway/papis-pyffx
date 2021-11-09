@@ -5,9 +5,8 @@ class Feistel_cipher(ABC):
     #http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec.pdf (using Figure 1, method 2)
     #Same Feistel in https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-38Gr1-draft.pdf
 
-    def __init__(self, radix, rounds):
+    def __init__(self, key, radix):
         self.radix = radix
-        self.rounds = rounds
 
     @abstractmethod
     def add(self, a, b):

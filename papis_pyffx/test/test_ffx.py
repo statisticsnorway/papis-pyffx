@@ -1,17 +1,18 @@
 import unittest
 from ..fixedalphabet import FixedAlphabet
 from ..codecs import String, Integer
+from ..ffx import FFX
 
 class StringTests(unittest.TestCase):
     def test_encrypt(self):
-        s = String(b"foo", "abc")
+        s = String(FFX, b"foo", "abc")
         self.assertRaises(ValueError, s.encrypt, "abx")
         self.assertEqual(s.encrypt("cba"), "abb")
         self.assertEqual(s.decrypt(s.encrypt("ccc")), "ccc")
 
 class IntegerTests(unittest.TestCase):
     def test_encrypt(self):
-        d = Integer(b"foo", length=2)
+        d = Integer(FFX, b"foo", length=2)
         for i in range(100):
             self.assertEqual(d.decrypt(d.encrypt(i)), i)
         hist = set()
@@ -20,11 +21,11 @@ class IntegerTests(unittest.TestCase):
         self.assertEqual(hist, set(range(100)))
 
     def test_encrypt_big_number(self):
-        d = Integer(b"foo", length=20)
+        d = Integer(FFX, b"foo", length=20)
         self.assertEqual(d.decrypt(d.encrypt(1)), 1)
 
     def test_cypher_text_with_leading_zero(self):
-        d = Integer(b"foo", 2)
+        d = Integer(FFX, b"foo", 2)
         n = 11
         encrypted = d.encrypt(n)
         self.assertTrue(len(str(encrypted)), 1)
@@ -32,13 +33,13 @@ class IntegerTests(unittest.TestCase):
 
 class FixedStringTests(unittest.TestCase):
     def test_encrypt(self):
-        s = FixedAlphabet(b'foo', 'abc')
+        s = FixedAlphabet(FFX, b'foo', 'abc')
         self.assertEqual(s.encrypt("abx"), "aax")
         self.assertEqual(s.encrypt("cba"), "abb")
         self.assertEqual(s.decrypt(s.encrypt("ccc")), "ccc")
         
     def test_encrypt_nonalfabetString(self):
-         s = FixedAlphabet(b'foo')
+         s = FixedAlphabet(FFX, b'foo')
          self.assertTrue(s.pack('abcåæ'),([0, 1, 2], [0, 1, 2, 'å', 'æ']))
          self.assertTrue(s.encrypt('abcåæ'), 'i68åæ')
          self.assertTrue(s.unpack(*s.pack('abcåæ')))

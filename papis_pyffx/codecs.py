@@ -1,14 +1,12 @@
 from abc import ABC, abstractmethod
 import string
 
-from .ff1 import FF1
-
 class Codec(ABC):
     #Abstract class 
-    def __init__(self, ffx, alphabet, **kwargs):
-        self.ffx = ( ffx 
-            if hasattr(ffx, 'encrypt') and hasattr(ffx, 'decrypt') 
-            else FF1_AES(ffx, len(alphabet), **kwargs) )
+    def __init__(self, ffx, key, alphabet, **kwargs):
+        if not hasattr(ffx, 'encrypt') and hasattr(ffx, 'decrypt'):
+            raise ValueError('No cipher supplied')
+        self.ffx = ffx(key, len(alphabet))
         self.alphabet = alphabet
         self.pack_map = {c: i for i, c in enumerate(alphabet)}
 
@@ -39,15 +37,15 @@ class String(Codec):
             raise ValueError('non-alphabet character: %s' % e)
             
     def unpack(self, v):
-        return ''.join(super(String, self).unpack(v))
+        return ''.join(super().unpack(v))
 
 class Integer(String):
-    def __init__(self, ffx, length, **kwargs):
+    def __init__(self, ffx, key, length, **kwargs):
         self.length = length
-        super(Integer, self).__init__(ffx, string.digits, **kwargs)
+        super().__init__(ffx, key, string.digits, **kwargs)
 
     def pack(self, v):
-        return super(Integer, self).pack(str(v).zfill(self.length))
+        return super().pack(str(v).zfill(self.length))
 
     def unpack(self, v):
-        return int(super(Integer, self).unpack(v))
+        return int(super().unpack(v))
