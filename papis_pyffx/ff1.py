@@ -2,16 +2,8 @@ import math
 from .ffx import Feistel_cipher
 from Crypto.Cipher import AES
 
-fixedkey = bytes.fromhex('2b7e151628aed2a6abf7158809cf4f3c')
-fixedkey2 = bytes.fromhex('2B7E151628AED2A6ABF7158809CF4F3CEF4359D8D580AA4F')
-iv = bytes.fromhex('00000000000000000000000000000000')
-radix = 10
-x = 10
-P = [1,2,1,0,0,10,10,5,0,0,0,10,0,0,0,0]      
-
-#Rename to FF1_AES
-class FF1_AES(Feistel_cipher):
-    #Implements the NIST standarddised round function F
+class FF1(Feistel_cipher):
+    #Implements the NIST standarddised round function FF1
     #Following the NIST example
     #https://nvlpubs.nist.gov/nistpubs/specialpublications/nist.sp.800-38g.pdf
     #https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/FF1samples.pdf  
@@ -21,6 +13,7 @@ class FF1_AES(Feistel_cipher):
         rounds = 10
         super().__init__(radix, rounds)
         self.key = key
+        self.cipherECB = AES.new(self.key, AES.MODE_ECB)
         self.logRadix = math.log(radix, 2)
       
     @staticmethod
@@ -68,13 +61,37 @@ class FF1_AES(Feistel_cipher):
         if d<=16:
             return r[0:d]
         i = 0
-        cipher = AES.new(self.key, AES.MODE_ECB)
+
         while d//16 != r//16:
             i += 1
-            r = r + cipher.encrypt(self.byte_xor(r[0:16], i.to_bytes(16, byteorder='big')))   
+            r = r + self.cipherECB.encrypt(
+                self.byte_xor(r[0:16], i.to_bytes(16, byteorder='big')))   
         return r[0:d]
-
+    
     def encrypt(self, v, tweak = []):
+        A, B = self.split(v)
+        b = math.ceil((len(v)+1)//2*self.logRadix/8)
+        #print (A, B)
+        P = self.setP(len(v),len(tweak))
+        for i in range(10):
+            #print(f'Round {i}')
+            Q = self.setQ(tweak, i, B, b)
+            R = self.AES_CBC(P + Q)
+            #print(P, Q)
+            s = self.setS(R, len(v))
+            #print(bytes(s).hex())
+            y = int.from_bytes(bytes(s), byteorder='big')
+            m = (len(v)+i%2)//2
+            c = (self._numRaxixX(A) + y)%(self.radix ** m)
+            C = self.splitN(c, m)
+            #print (s.hex(), y, c, C)
+            A, B = B, C
+            #print('A B', A, B)
+            #c = self.add(a, self.round(i, b, len(v), tweak))
+            #a, b = b, c
+        return A + B
+    
+    def encrypt2(self, v, tweak = []):
         A, B = self.split(v)
         b = math.ceil((len(v)+1)//2*self.logRadix/8)
         #print (A, B)

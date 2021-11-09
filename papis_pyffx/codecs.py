@@ -1,14 +1,14 @@
 from abc import ABC, abstractmethod
 import string
 
-from .ffx import FFX
+from .ff1 import FF1
 
 class Codec(ABC):
     #Abstract class 
     def __init__(self, ffx, alphabet, **kwargs):
         self.ffx = ( ffx 
             if hasattr(ffx, 'encrypt') and hasattr(ffx, 'decrypt') 
-            else FFX(ffx, len(alphabet), **kwargs) )
+            else FF1_AES(ffx, len(alphabet), **kwargs) )
         self.alphabet = alphabet
         self.pack_map = {c: i for i, c in enumerate(alphabet)}
 

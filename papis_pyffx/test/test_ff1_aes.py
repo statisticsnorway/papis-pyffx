@@ -1,5 +1,5 @@
 import unittest
-from ..ff1_aes import FF1_AES
+from ..ff1 import FF1
 
 #FF1 NIST implementation https://nvlpubs.nist.gov/nistpubs/specialpublications/nist.sp.800-38g.pdf
 #FF1 NIST test vectors https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/FF1samples.pdf
@@ -26,46 +26,46 @@ class FF1TestVectors(unittest.TestCase):
     chiffer9 = [33, 28, 8, 10, 0, 10, 35, 17, 2, 10, 31, 34, 10, 21, 34, 35, 30, 32, 13]
     
     def test_FF1_128_NoTweak(self): #Sample #1
-        cipher = FF1_AES(self.key1, 10)
+        cipher = FF1(self.key1, 10)
         self.assertEqual(cipher.encrypt(self.clear1), self.chiffer1No)
         self.assertEqual(cipher.decrypt(self.chiffer1No), self.clear1)
         
     def test_FF1_128_Tweak(self): #Sample #2
-        cipher = FF1_AES(self.key1, 10)
+        cipher = FF1(self.key1, 10)
         self.assertEqual(cipher.encrypt(self.clear1, self.tweak1), self.chiffer1Tw)
         self.assertEqual(cipher.decrypt(self.chiffer1Tw, self.tweak1), self.clear1)
         
     def test_FF1_128_Tweak2(self): #Sample #3
-        cipher = FF1_AES(self.key1, 36)
+        cipher = FF1(self.key1, 36)
         self.assertEqual(cipher.encrypt(self.clear2, self.tweak2), self.chiffer2)
         self.assertEqual(cipher.decrypt(self.chiffer2, self.tweak2), self.clear2)
         
     def test_FF1_192_NoTweak(self): #Sample #4
-        cipher = FF1_AES(self.key4, 10)
+        cipher = FF1(self.key4, 10)
         self.assertEqual(cipher.encrypt(self.clear1), self.chiffer4No)
         self.assertEqual(cipher.decrypt(self.chiffer4No), self.clear1)      
         
     def test_FF1_192_Tweak(self): #Sample #5
-        cipher = FF1_AES(self.key4, 10)
+        cipher = FF1(self.key4, 10)
         self.assertEqual(cipher.encrypt(self.clear1, self.tweak1), self.chiffer4Tw)
         self.assertEqual(cipher.decrypt(self.chiffer4Tw, self.tweak1), self.clear1)
         
     def test_FF1_192_Tweak2(self): #Sample #6
-        cipher = FF1_AES(self.key4, 36)
+        cipher = FF1(self.key4, 36)
         self.assertEqual(cipher.encrypt(self.clear2, self.tweak2), self.chiffer6)
         self.assertEqual(cipher.decrypt(self.chiffer6, self.tweak2), self.clear2)
 
     def test_FF1_256_NoTweak(self): #Sample #7
-        cipher = FF1_AES(self.key7, 10)
+        cipher = FF1(self.key7, 10)
         self.assertEqual(cipher.encrypt(self.clear1), self.chiffer7No)
         self.assertEqual(cipher.decrypt(self.chiffer7No), self.clear1)      
         
     def test_FF1_256_Tweak(self): #Sample #8
-        cipher = FF1_AES(self.key7, 10)
+        cipher = FF1(self.key7, 10)
         self.assertEqual(cipher.encrypt(self.clear1, self.tweak1), self.chiffer7Tw)
         self.assertEqual(cipher.decrypt(self.chiffer7Tw, self.tweak1), self.clear1)
         
     def test_FF1_256_Tweak2(self): #Sample #9
-        cipher = FF1_AES(self.key7, 36)
+        cipher = FF1(self.key7, 36)
         self.assertEqual(cipher.encrypt(self.clear2, self.tweak2), self.chiffer9)
         self.assertEqual(cipher.decrypt(self.chiffer9, self.tweak2), self.clear2)   
