@@ -64,6 +64,7 @@ class FF3(Feistel_cipher):
         p[0:4] = list(W)
         p[3] = p[3] ^ i
         numRadixB = self._numRaxixX(B, reverse=True)
+        numRadixB = numRadixB % (256**12)
         p[4:16] = list(numRadixB.to_bytes(12, byteorder='big'))
         return p
     
