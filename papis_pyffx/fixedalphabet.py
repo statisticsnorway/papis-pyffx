@@ -1,13 +1,14 @@
 import string 
-from .codecs import Codec
+from papis_pyffx.codecs import Codec
 
 class FixedAlphabet(Codec):
-    #Same as String except encrypted values that are not part of the standard
-    #alphabet are ignored. E.g. if alphabet = 'abcde', and cleartext = 'table'
-    #then only 'abe' is encrypted the other elements are left in place.
+    #Filters a string removing encrypted only that are not part of the alphabet.
+    #alphabet. The values not part of the alphabet are ignored.
+    #E.g. if alphabet = 'abcde', and cleartext = 'table' then only 'abe' is
+    # encrypted the other elements are left in place.
     #If no alphabet is given the the alphabet consists of 'a-z,A-z,0-9'
     def __init__(self, ffx, key,
-                 alphabet=string.ascii_lowercase + string.ascii_uppercase + string.digits, 
+                 alphabet=string.ascii_letters + string.digits, 
                  **kwargs):
         super().__init__(ffx, key, alphabet, **kwargs)
         
@@ -21,6 +22,20 @@ class FixedAlphabet(Codec):
         pack, split = self.pack(v)
         return self.unpack(self.ffx.decrypt(pack), split)
 
+    def filter(self, v):
+        #Filters v for values not part of the alphabet. Return filtered string.
+        return ''.join([x for x in v if x in self.setAlphabet])
+    
+    def unfilter(self, orig : str, pseudo : str):
+        #Unfilter takes a string as orig and the pseudonymised value as string.
+        #The length of pseudo and of the function filter should be the same 
+        it = iter(pseudo)
+        ret = ''.join([next(it) if c in self.setAlphabet
+                else c for c in orig])
+        ne = next(it, None)
+        if ne != None:
+            raise AttributeError('Wrong size of pseudo')
+        return ret
 
     def pack(self, v):
         #Splits the string into two strings, the first containing only the string

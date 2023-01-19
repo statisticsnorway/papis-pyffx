@@ -8,6 +8,7 @@ class Codec(ABC):
             raise ValueError('No cipher supplied')
         self.ffx = ffx(key, len(alphabet))
         self.alphabet = alphabet
+        self.setAlphabet = set(alphabet)
         self.pack_map = {c: i for i, c in enumerate(alphabet)}
 
     def encrypt(self, v):
