@@ -1,5 +1,5 @@
 import unittest
-from ..ff1 import FF1
+from papis_pyffx.algorithms.ff1 import FF1
 
 #FF1 NIST implementation https://nvlpubs.nist.gov/nistpubs/specialpublications/nist.sp.800-38g.pdf
 #FF1 NIST test vectors https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/FF1samples.pdf

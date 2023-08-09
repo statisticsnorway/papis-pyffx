@@ -1,6 +1,6 @@
 import unittest
 import tempfile
-from ..load_key import load_key_from_file
+from papis_pyffx.algorithms.load_key import load_key_from_file
 
 class TestLoadKey(unittest.TestCase):
     keyCvc = (('2b7e151628aed2a6abf7158809cf4f3c' , '7df76b0c1ab899b33e42f047b91b546f'),

@@ -1,5 +1,5 @@
 import string 
-from papis_pyffx.codecs import Codec
+from .codecs import Codec
 
 class FixedAlphabet(Codec):
     #Filters a string removing encrypted only that are not part of the alphabet.

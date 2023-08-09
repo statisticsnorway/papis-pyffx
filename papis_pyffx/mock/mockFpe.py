@@ -1,34 +1,21 @@
-from papis_pyffx.fixedalphabet import FixedAlphabet
-from papis_pyffx.protocol.fpeProtocol import FpeProtocol
-from papis_pyffx.ff3 import FF3
 from string import ascii_letters, digits
-from typing import Protocol, Union
 from enum import Enum
 from threading import Lock
+from typing import Iterable
+
+from papis_pyffx.algorithms.fixedalphabet import FixedAlphabet
+from papis_pyffx.algorithms.ff3 import FF3
+from papis_pyffx.protocol.fpeProtocol import FpeProtocol
+from papis_pyffx.protocol.algProtocol import AlgProtocol
 
 class OPERATIONS(Enum):
     encrypt = 'encrypt'
     decrypt = 'decrypt'
 
-class AlgProtocol(Protocol):
-    def encrypt(self, v : str) -> str:
-        raise NotImplementedError
-
-    def decrypt(self, v : str) -> str:
-        raise NotImplementedError
-    
-    def filter(self, v) -> Union[bytes, str]:
-        raise NotImplementedError
-    
-    def unfilter(self, orig : str, pseudo : bytes) -> str:
-        raise NotImplementedError
-
 def _algorithm(key : str = 'EF4359D8D580AA4F7F036D6F04FC6A94', algorithm = FF3):
     key = bytes.fromhex(key)
     alphabet = ascii_letters + digits
     alg = FixedAlphabet(algorithm, key, alphabet = alphabet)
-    #from ff3 import FF3Cipher 
-    #alg = FF3Cipher(key=key, tweak='0'*16, radix=62)
     return alg
     
 class MockFpe(FpeProtocol):
@@ -45,16 +32,16 @@ class MockFpe(FpeProtocol):
         di = self._getCrypt(set((chiffer,)), OPERATIONS.decrypt)
         return di[chiffer]
 
-    def encryptSet(self, clearSet) -> dict:
-        return self._getCrypt(clearSet, OPERATIONS.encrypt)
+    def encryptSet(self, clearSet : Iterable[str]) -> dict[str, str]:
+        return self._getCrypt(set(clearSet), OPERATIONS.encrypt)
 
-    def decryptSet(self, chifferSet) -> dict:
-        return self._getCrypt(chifferSet, OPERATIONS.decrypt)
+    def decryptSet(self, chifferSet : Iterable[str]) -> dict[str, str]:
+        return self._getCrypt(set(chifferSet), OPERATIONS.decrypt)
     
     def maxQuerySize(self) -> int:
         return self.maxSize
             
-    def _getCrypt(self, chSet : Union[set, list], op : OPERATIONS) -> dict:
+    def _getCrypt(self, chSet : set, op : OPERATIONS) -> dict:
         #Ensures all elements of chSet are of type str                
         initialDict = {x : self.algorithm.filter(str(x)) for x in chSet}
         strSet = set(initialDict.values()) - {''}

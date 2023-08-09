@@ -1,20 +1,28 @@
-from typing import Protocol, Union
+from typing import Protocol, Iterable
+from papis_pyffx.protocol.algProtocol import AlgProtocol
 
-class FpeProtocol(Protocol):
-    def encrypt(self, v : str) -> str:
-        raise NotImplementedError
-
-    def decrypt(self, v : str) -> str:
+class FpeProtocol(AlgProtocol):
+    """Extends the simple algorithm protocol that has only encrypt and decrypt
+    with a encrypt/decrypt set up to size maxQuerySize and alphabet used by the FPE encyption algorithm
+    """
+    def encrypt_set(self, di : Iterable[str] ) -> dict[str, str]:
+        """Encrypts an iterable element of type strings.
+        Returns:
+            A dictionary containing the original string as key and the encrypted string as value."""
         raise NotImplementedError
     
-    def encryptSet(self, di : Union[list, set]) -> dict:
-        raise NotImplementedError
-    
-    def decryptSet(self, di : Union[list, set]) -> dict:
+    def decrypt_set(self, di : Iterable[str]) -> dict[str, str]:
+        """Decrypts an iterable element of type strings.
+        Returns:
+            A dictionary containing the original string as key and the decrypted string as value."""
         raise NotImplementedError
 
-    def maxQuerySize(self) -> int:
+    def max_query_size(self) -> int:
+        """Returns:
+            A integer indicating the maximum size of the iterable transmitted to an encryptSet/decryptSet"""
         raise NotImplementedError
     
-    def alphabet(self) -> str:
+    def get_alphabet(self) -> str:
+        """Returns:
+            A string indicating set of the allowed alphabet used by the algorithm."""
         raise NotImplementedError
