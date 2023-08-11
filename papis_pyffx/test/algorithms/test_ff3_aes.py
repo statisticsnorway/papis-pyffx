@@ -1,5 +1,5 @@
 import unittest
-from ..ff3 import FF3
+from papis_pyffx.algorithms.ff3 import FF3
 
 #FF3 NIST implementation https://nvlpubs.nist.gov/nistpubs/specialpublications/nist.sp.800-38g.pdf
 #FF3 NIST test vectors https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/FF3samples.pdf

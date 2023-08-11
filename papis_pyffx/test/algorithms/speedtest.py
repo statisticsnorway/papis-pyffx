@@ -1,8 +1,8 @@
 import time
 from functools import wraps
-from .ffx import FFX
-from .ff1 import FF1
-from .ff3 import FF3
+from papis_pyffx.algorithms.ffx import FFX
+from papis_pyffx.algorithms.ff1 import FF1
+from papis_pyffx.algorithms.ff3 import FF3
 
 #Function is timed result is written as print
 def timeit(func):
